@@ -1,6 +1,6 @@
 node('jenkins-slave.usbank.com') {
 	stage('Poll') {
-		scm checkout
+		checkout scm
 	}
 	stage('Build & Unit Test') {
 		sh 'mvn clean verify -DskipITs=true';
