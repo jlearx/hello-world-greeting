@@ -27,7 +27,7 @@ node('jenkins-slave.usbank.com') {
 			"files": [
 				{
 					"pattern": "target/hello-0.0.1.war",
-					"target": "helloworld-greeting-project/${BUILD_NUMBER}/",
+					"target": "generic-local/${BUILD_NUMBER}/",
 					"props": "Integration-Tested=Yes;Performance-Tested=No"
 				}
 			]
