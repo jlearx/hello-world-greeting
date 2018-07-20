@@ -22,7 +22,7 @@ node('jenkins-slave.usbank.com') {
 		archive 'target/*.jar'	
 	}
 	stage('Publish') {
-		def server = Artifactory.server 'Default Artifactory Server'
+		def server = Artifactory.server 'Artifactory Server'
 		def uploadSpec = """{
 			"files": {
 				{
