@@ -34,4 +34,26 @@ node('jenkins-slave.usbank.com') {
 		}"""
 		server.upload(uploadSpec)
 	}
+	stash includes: 'target/hello-0.0.1.war,src/pt/Hello_World_Test_Plan.jmx', name: 'binary'
+}
+
+node('qatest.usbank.com') {
+	stage('Start Tomcat') {
+		sh '''cd /home/jenkins_agent/tomcat/bin
+		./startup.sh''';
+	}
+	stage('Deploy') {
+		unstash 'binary'
+		sh 'cp target/hello-0.0.1.war /home/jenkins_agent/tomcat/webapps/';
+	}
+	stage('Performance Testing') {
+		sh '''cd /opt/jmeter/bin/
+		./jmeter.sh -n -t $WORKSPACE/src/pt/Hello_World_Test_Plan.jmx -l $WORKSPACE/test_report.jtl''';
+		step([$class: 'ArtifactArchiver', artifacts: '**/*.jtl'])
+	}
+	stage('Promote Build in Artifactory') {
+		withCredentials([usernameColonPassword(credentialsId: 'artifactory-account', variable: 'credentials')]) {
+			sh 'curl -u${credentials} -X PUT "http://jenkins-master.usbank.com:8081/artifactory/api/storage/example-project/${BUILD_NUMBER}/hello-0.0.1.war?properties=Performance-Tested=Yes"';
+		}
+	}
 }
