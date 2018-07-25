@@ -52,7 +52,7 @@ node('qatest.usbank.com') {
 		step([$class: 'ArtifactArchiver', artifacts: '**/*.jtl'])
 	}
 	stage('Promote Build in Artifactory') {
-		withCredentials([usernameColonPassword(credentialsId: 'artifactory-account', variable: 'credentials')]) {
+		withCredentials([usernameColonPassword(credentialsId: 'f56e46b4-e75e-4a89-848b-b04dd7199747', variable: 'credentials')]) {
 			sh 'curl -u${credentials} -X PUT "http://jenkins-master.usbank.com:8081/artifactory/api/storage/example-project/${BUILD_NUMBER}/hello-0.0.1.war?properties=Performance-Tested=Yes"';
 		}
 	}
