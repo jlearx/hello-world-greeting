@@ -64,7 +64,7 @@ node ('prod.usbank.com') {
 		def downloadSpec = """{
 			"files": [
 				{
-					"pattern": "generic-local/${BUILD_NUMBER}/*.zip",
+					"pattern": "generic-local/${BUILD_NUMBER}/*.war",
 					"target": "/home/jenkins_agent/tomcat/webapps/",
 					"props": "Integration-Tested=Yes;Performance-Tested=Yes"
 				}
