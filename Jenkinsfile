@@ -57,3 +57,19 @@ node('qatest.usbank.com') {
 		}
 	}
 }
+
+node ('prod.usbank.com') {
+	stage('Deploy to Prod') {
+		def server = Artifactory.server 'Artifactory Server'
+		def downloadSpec = """{
+			"files": [
+				{
+					"pattern": "generic-local/${BUILD_NUMBER}/*.zip",
+					"target": "/home/jenkins_agent/tomcat/webapps/",
+					"props": "Integration-Tested=Yes;Performance-Tested=Yes"
+				}
+			]
+		}"""
+		server.download(downloadSpec)
+	}
+}
